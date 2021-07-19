@@ -84,7 +84,70 @@ end
 
 ## Q4
 function find_nearest_surface_normal(s::Square, coord)
-    # implement me
+
+    # This function uses the assumption that points on a diagonal of the Square are ill-defined.
+    # If a point lies on a diagonal, the nearest vertex is used as the closest element of the Square.
+
+    # Translating the Square's center to (0,0) and combating rounding errors.
+    # (Not sure what the best practice is for correcting rounding errors in Julia)
+    x,y = round(coord[1] - s.x, digits=15), 
+          round(coord[2] - s.y, digits=15)
+
+    # Checking for points on the line y=x.
+    if y == x
+        if x > 0
+            return SVector(1/sqrt(2), 1/sqrt(2))
+        else
+            return SVector(-1/sqrt(2), -1/sqrt(2))
+        end
+    end
+
+    # Checking for points on the line y=-x.
+    if y == -x
+        if x > 0
+            return SVector(1/sqrt(2), -1/sqrt(2))
+        else
+            return SVector(-1/sqrt(2), 1/sqrt(2))
+        end
+    end
+
+    # Checking points nearest an edge.
+    if x > -s.w/2 && x < s.w/2 || y > -s.w/2 && y < s.w/2
+
+        # Checking points outside the Square.
+        if x > s.w/2
+            return SVector(1.0, 0.0)
+        elseif y > s.w/2
+            return SVector(0.0, 1.0)
+        elseif x < -s.w/2
+            return SVector(-1.0, 0.0)
+        elseif y < -s.w/2
+            return SVector(0.0, -1.0)
+        end
+
+        # Checking points inside the Square.
+        d = [abs(s.w/2 - x),
+             abs(s.w/2 - y),
+             abs(-s.w/2 - x),
+             abs(-s.w/2 - y)]
+        vects = [SVector(1.0, 0.0),
+                 SVector(0.0, 1.0),
+                 SVector(-1.0, 0.0),
+                 SVector(0.0, -1.0)]
+        return vects[argmin(d)]
+    end
+
+    # Checking points nearest a vertex.
+    d = [sqrt(.5 * s.w^2 - s.w * (x + y) + x^2 + y^2),
+         sqrt(.5 * s.w^2 + s.w * (x - y) + x^2 + y^2),
+         sqrt(.5 * s.w^2 - s.w * (x - y) + x^2 + y^2),
+         sqrt(.5 * s.w^2 + s.w * (x + y) + x^2 + y^2)]
+    vects = [SVector(1/sqrt(2), 1/sqrt(2)),
+             SVector(-1/sqrt(2), 1/sqrt(2)),
+             SVector(1/sqrt(2), -1/sqrt(2)),
+             SVector(-1/sqrt(2), -1/sqrt(2))]
+    return vects[argmin(d)]
+
 end
 
 ## Q5

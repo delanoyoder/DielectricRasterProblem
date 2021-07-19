@@ -62,7 +62,7 @@ NOTE: Our `GriddedArray` must have non-zero entries, since a `0.0` dielectric co
 
 ## Q4
 
-Surfaces are important in E&M simulations. Write a function `surface_normal(s::Square, coord)` which returns the surface normal vector of the `s::Square` nearest to the `coord`inate. In the case where the nearest element of `s` is a corner (or vertex), return the vector which is the mean of the surface normals of the adjacent faces.
+Surfaces are important in E&M simulations. Write a function `surface_normal(s::Square, coord)` which returns the surface normal vector of the `s::Square` nearest to the `coord`inate. In the case where the nearest element of `s` is a corner (or vertex), or `coord` resides on a diagonal of the `s`, return the vector, which is the mean of the surface normals of the adjacent faces.
 
 ## Q5
 `surface_normal` should return a `Vector` of some type. Write a function which transforms from the global coordinate frame used in `GriddedArray` to one where a vector returned by `surface_normal` is a basis vector, specifically the last basis vector. If passed a vector or array `A`, then the result of `orient_along_normal(A, normal)` should have the last axis parallel to `normal`.
