@@ -62,7 +62,6 @@ end
 ## Q2
 function raster_scalar_dielectric!(A::GriddedArray, s::Square)
 
-    # The average is just the weighted sum of the Square and GriddedArray.
     # Determining the weights for the Square.
     weights = GriddedArray(A.xlims, A.ylims, ones(size(A.pixels)))
     raster_area!(weights, s)
@@ -73,7 +72,14 @@ end
 
 ## Q3
 function raster_harmonic!(A::GriddedArray, s::Square)
-    # implement me
+
+    # Determining the weights for the Square.
+    weights = GriddedArray(A.xlims, A.ylims, ones(size(A.pixels)))
+    raster_area!(weights, s)
+
+    # Saving the harmonic average to the respective pixels in the GriddedArray object.
+    A.pixels[:,:] = ones(size(A.pixels)) ./ ((weights.pixels ./ s.dielectric) + ((1.0 .- weights.pixels) ./ A.pixels))
+
 end
 
 ## Q4
