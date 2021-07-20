@@ -152,8 +152,12 @@ end
 
 ## Q5
 function orient_along_normal(A, normal)
-    # implement me
-    # return `A` oriented in a new reference frame with one axes parallel to `normal`
+
+    # Calculating the inverse of the new basis.
+    basis = inv([normal[2] normal[1]; -normal[1] normal[2]])
+
+    # Applying the inverse basis to our vector or matrix.
+    return basis * A
 end
 
 ## Q6, OPTIONAL
